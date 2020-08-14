@@ -14,11 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO:: Fix doc of whole project
-package main
+package config
 
-import "github.com/amarjeetanandsingh/tgconst/cmd"
+type cleanerCfg struct {
+	Dir         string
+	IsRecursive bool
+}
 
-func main() {
-	cmd.Execute()
+type generatorCfg struct {
+	Dir              string
+	Tags             []string
+	NoSuffix         bool
+	IsRecursive      bool
+	OnlyTaggedFields bool
+}
+
+var cfgStore = struct {
+	cleaner   cleanerCfg
+	generator generatorCfg
+}{}
+
+func GetCleanerCfg() *cleanerCfg {
+	return &cfgStore.cleaner
+}
+
+func GetGeneratorCfg() *generatorCfg {
+	return &cfgStore.generator
 }

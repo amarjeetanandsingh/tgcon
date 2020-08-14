@@ -14,11 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO:: Fix doc of whole project
-package main
+package gen
 
-import "github.com/amarjeetanandsingh/tgconst/cmd"
+// moved the option functions from gen.go to keep the logic clean out there
 
-func main() {
-	cmd.Execute()
+func Dir(d string) func(*generator) {
+	return func(g *generator) {
+		g.dir = d
+	}
+}
+
+func Tags(t []string) func(*generator) {
+	return func(g *generator) {
+		g.tags = t
+	}
+}
+
+func NoSuffix(n bool) func(*generator) {
+	return func(g *generator) {
+		g.noSuffix = n
+	}
+}
+
+func Recursive(r bool) func(*generator) {
+	return func(g *generator) {
+		g.isRecursive = r
+	}
+}
+
+func TaggedFieldOnly(tagged bool) func(*generator) {
+	return func(g *generator) {
+		g.onlyTaggedFields = tagged
+	}
 }

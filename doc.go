@@ -14,11 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO:: Fix doc of whole project
+// TODO add comments here
 package main
-
-import "github.com/amarjeetanandsingh/tgconst/cmd"
-
-func main() {
-	cmd.Execute()
-}

@@ -13,39 +13,45 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package cmd
 
 import (
 	"fmt"
 
+	"github.com/amarjeetanandsingh/tgconst/clean"
+	"github.com/amarjeetanandsingh/tgconst/config"
+
 	"github.com/spf13/cobra"
+)
+
+const (
+	// TODO
+	cleanShortDoc = ""
+	cleanLongDoc  = ""
 )
 
 // cleanCmd represents the clean command
 var cleanCmd = &cobra.Command{
 	Use:   "clean",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long:  cleanLongDoc,
+	Short: cleanShortDoc,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("clean called")
+		c := clean.New(
+			clean.Dir(config.GetCleanerCfg().Dir),
+			clean.Recursive(config.GetCleanerCfg().IsRecursive),
+		)
+		if err := c.Do(); err != nil {
+			fmt.Println(err)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(cleanCmd)
 
-	// Here you will define your flags and configuration settings.
+	cfg := config.GetCleanerCfg()
+	cleanCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Delete generated const file from given directory")
+	cleanCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively delete generated const files for all subdirectories too")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// cleanCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// cleanCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

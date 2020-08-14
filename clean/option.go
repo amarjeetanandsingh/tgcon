@@ -14,11 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO:: Fix doc of whole project
-package main
+package clean
 
-import "github.com/amarjeetanandsingh/tgconst/cmd"
+// moved the option functions from clean.go to keep the logic clean out there
 
-func main() {
-	cmd.Execute()
+func Dir(d string) func(*cleaner) {
+	return func(c *cleaner) {
+		c.dir = d
+	}
+}
+
+func Recursive(isRecursive bool) func(*cleaner) {
+	return func(c *cleaner) {
+		c.isRecursive = isRecursive
+	}
 }

@@ -13,39 +13,55 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package cmd
 
 import (
 	"fmt"
 
+	"github.com/amarjeetanandsingh/tgconst/config"
+	"github.com/amarjeetanandsingh/tgconst/gen"
+
 	"github.com/spf13/cobra"
 )
 
-// genCmd represents the gen command
+const (
+	genShortDoc = "generates struct field tag values as string constant"
+	genLongDoc  = `
+It generates string constants of struct field tag values. All constants are
+generated into a new file(with _tgconst_gen.go as suffix) for each package.
+
+Before each run, it deletes all previously generated _tgconst_gen.go files.
+If you don't want to delete previously generated _tgconst_gen.go files, you
+can use -noClean flag.`
+)
+
 var genCmd = &cobra.Command{
 	Use:   "gen",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: genShortDoc,
+	Long:  genLongDoc,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gen called")
+		cfg := config.GetGeneratorCfg()
+		g := gen.New(
+			gen.Dir(cfg.Dir),
+			gen.Tags(cfg.Tags),
+			gen.NoSuffix(cfg.NoSuffix),
+			gen.Recursive(cfg.IsRecursive),
+			gen.TaggedFieldOnly(cfg.OnlyTaggedFields),
+		)
+		if err := g.Do(); err != nil {
+			fmt.Println(err)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(genCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// genCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// genCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	cfg := config.GetGeneratorCfg()
+	genCmd.Flags().BoolVarP(&cfg.NoSuffix, "noSuffix", "s", false, "Do not add tag value as const suffix")
+	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate constants for the given dir directory")
+	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{"json"}, "List of tags we are going to create constants for")
+	genCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively create constants for all subdirectories too")
+	genCmd.Flags().BoolVarP(&cfg.OnlyTaggedFields, "onlyTagged", "e", false, " Escape empty tag fields. Do not create string constants for unTagged fields.")
 }
