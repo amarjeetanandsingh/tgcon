@@ -19,3 +19,6 @@
 
 # mac
 .DS_Store
+
+# binary
+tgconst

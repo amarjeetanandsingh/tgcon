@@ -16,7 +16,11 @@ limitations under the License.
 
 package clean
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/amarjeetanandsingh/tgconst/files"
+)
 
 type cleaner struct {
 	// Setting `isRecursive` true will generate const for all the subdirectories too.
@@ -39,8 +43,12 @@ func New(options ...func(c *cleaner)) *cleaner {
 	return c
 }
 
+// TODO:: make _tgconst_gen.go suffix as config
 func (c *cleaner) Do() error {
-	// TODO: IMPLEMENT
-	fmt.Printf("tgconst clean: %+v", c)
+	f := files.New(c.isRecursive, c.dir)
+	if err := f.DeleteFilesWithSuffix("_tgconst_gen.go"); err != nil {
+		return fmt.Errorf("error deleting %s suffix files in %s dir :: %w", "_tgconst_gen.go", c.dir, err)
+	}
+	fmt.Println("clean successful.")
 	return nil
 }
