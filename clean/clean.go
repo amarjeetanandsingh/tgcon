@@ -30,6 +30,9 @@ type cleaner struct {
 	// Generate const file for the given directory. If `isRecursive` flag is set,
 	// it will generate const file recursively for all its subdirectories too.
 	dir string
+
+	// print all cleanup operations
+	verbose bool
 }
 
 func New(options ...func(c *cleaner)) *cleaner {
@@ -45,10 +48,10 @@ func New(options ...func(c *cleaner)) *cleaner {
 
 // TODO:: make _tgconst_gen.go suffix as config
 func (c *cleaner) Do() error {
-	f := files.New(c.isRecursive, c.dir)
+	f := files.New(c.verbose, c.isRecursive, c.dir)
 	if err := f.DeleteFilesWithSuffix("_tgconst_gen.go"); err != nil {
 		return fmt.Errorf("error deleting %s suffix files in %s dir :: %w", "_tgconst_gen.go", c.dir, err)
 	}
-	fmt.Println("clean successful.")
+	fmt.Println("Done.")
 	return nil
 }

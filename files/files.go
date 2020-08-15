@@ -11,21 +11,27 @@ import (
 type files struct {
 	RecursiveOp bool
 	CurDir      string
+	Verbose     bool // todo: set
 }
 
-func New(isRecursive bool, curDir string) *files {
-	f := &files{
+func New(verbose, isRecursive bool, curDir string) *files {
+	return &files{
 		RecursiveOp: isRecursive,
+		Verbose:     verbose,
 		CurDir:      curDir,
 	}
-	return f
 }
 
+// todo:v2: think of making it transactional
 func (f files) DeleteFilesWithSuffix(suffix string) error {
-	return deleteFilesWithSuffix(f.RecursiveOp, f.CurDir, suffix)
+	return f.deleteFilesWithSuffix(f.RecursiveOp, f.CurDir, suffix)
 }
 
-func deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error {
+// todo:v2: optimisation.
+// Do not call listFilesInDir & listDirs twice.
+// We can get the list of file & folders in a single call.
+// todo:v2: we can reuse deleteFileWithSuffix() in case of recursive call
+func (f files) deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error {
 	files, err := listFilesInDir(dir, func(fileName string) bool {
 		return strings.HasSuffix(fileName, suffix)
 	})
@@ -38,6 +44,12 @@ func deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error {
 		filePath := path.Join(dir, file.Name())
 		if err := os.Remove(filePath); err != nil {
 			return fmt.Errorf("files.deleteFilesWithSuffix():: error deleting %s file :: %w", filePath, err)
+		}
+
+		// log
+		if f.Verbose {
+			// todo:v2: use buffered out writer
+			fmt.Println("Deleted:", filePath)
 		}
 	}
 
@@ -58,7 +70,7 @@ func deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error {
 
 	for _, subDir := range subDirs {
 		subDirPath := path.Join(dir, subDir.Name())
-		if err := deleteFilesWithSuffix(isRecursive, subDirPath, suffix); err != nil {
+		if err := f.deleteFilesWithSuffix(isRecursive, subDirPath, suffix); err != nil {
 			return err
 		}
 	}

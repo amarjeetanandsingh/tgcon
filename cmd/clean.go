@@ -39,6 +39,7 @@ var cleanCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		c := clean.New(
 			clean.Dir(config.GetCleanerCfg().Dir),
+			clean.Verbose(config.GetCleanerCfg().Verbose),
 			clean.Recursive(config.GetCleanerCfg().IsRecursive),
 		)
 		if err := c.Do(); err != nil {
@@ -51,7 +52,7 @@ func init() {
 	rootCmd.AddCommand(cleanCmd)
 
 	cfg := config.GetCleanerCfg()
+	cleanCmd.Flags().BoolVarP(&cfg.Verbose, "verbose", "v", false, "verbose output")
 	cleanCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Delete generated const file from given directory")
 	cleanCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively delete generated const files for all subdirectories too")
-
 }

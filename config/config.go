@@ -19,6 +19,7 @@ package config
 type cleanerCfg struct {
 	Dir         string
 	IsRecursive bool
+	Verbose     bool
 }
 
 type generatorCfg struct {

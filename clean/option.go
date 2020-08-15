@@ -29,3 +29,9 @@ func Recursive(isRecursive bool) func(*cleaner) {
 		c.isRecursive = isRecursive
 	}
 }
+
+func Verbose(verbose bool) func(*cleaner) {
+	return func(c *cleaner) {
+		c.verbose = verbose
+	}
+}
