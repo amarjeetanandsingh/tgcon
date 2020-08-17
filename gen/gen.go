@@ -212,20 +212,16 @@ func (g *generator) generateNewTagValue(fieldName string) string {
 	return fieldName
 }
 
-// Considere 60 char width
-// outputs "xyz" as "---- xyz -------"
-func (g *generator) centerAlignedText(s string) string {
-	spaceEachSide := 2
-	numOfDashEachSide := (60 - len(s) - spaceEachSide*2) / 2
+// Consider 60 char width
+// outputs "xyz" as "----  xyz  -------"
+func (g *generator) centerAlignedText(text string) string {
+	space := "  "
 
+	numOfDashEachSide := (60 - len(text) - len(space)*2) / 2
 	if numOfDashEachSide <= 0 {
-		return s
+		return text
 	}
 
-	finalString := strings.Repeat("-", numOfDashEachSide) +
-		"  " +
-		s +
-		"  " +
-		strings.Repeat("-", numOfDashEachSide)
-	return finalString
+	dashedString := strings.Repeat("-", numOfDashEachSide)
+	return dashedString + space + text + space + dashedString
 }
