@@ -52,6 +52,5 @@ func (c *cleaner) Do() error {
 	if err := f.DeleteFilesWithSuffix("_tgconst_gen.go"); err != nil {
 		return fmt.Errorf("error deleting %s suffix files in %s dir :: %w", "_tgconst_gen.go", c.dir, err)
 	}
-	fmt.Println("Done.")
 	return nil
 }

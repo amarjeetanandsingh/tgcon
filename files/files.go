@@ -8,10 +8,12 @@ import (
 	"strings"
 )
 
+//TODO think again, if this package is needed
+
 type files struct {
 	RecursiveOp bool
 	CurDir      string
-	Verbose     bool // todo: set
+	Verbose     bool
 }
 
 func New(verbose, isRecursive bool, curDir string) *files {
@@ -24,15 +26,15 @@ func New(verbose, isRecursive bool, curDir string) *files {
 
 // todo:v2: think of making it transactional
 func (f files) DeleteFilesWithSuffix(suffix string) error {
-	return f.deleteFilesWithSuffix(f.RecursiveOp, f.CurDir, suffix)
+	return f.deleteFilesWithSuffix(f.CurDir, suffix)
 }
 
 // todo:v2: optimisation.
 // Do not call listFilesInDir & listDirs twice.
 // We can get the list of file & folders in a single call.
 // todo:v2: we can reuse deleteFileWithSuffix() in case of recursive call
-func (f files) deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error {
-	files, err := listFilesInDir(dir, func(fileName string) bool {
+func (f files) deleteFilesWithSuffix(dir, suffix string) error {
+	fileNames, err := ListFilesInDir(dir, func(fileName string) bool {
 		return strings.HasSuffix(fileName, suffix)
 	})
 	if err != nil {
@@ -40,8 +42,8 @@ func (f files) deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error
 	}
 
 	// delete files in current directory
-	for _, file := range files {
-		filePath := path.Join(dir, file.Name())
+	for _, fileName := range fileNames {
+		filePath := path.Join(dir, fileName)
 		if err := os.Remove(filePath); err != nil {
 			return fmt.Errorf("files.deleteFilesWithSuffix():: error deleting %s file :: %w", filePath, err)
 		}
@@ -54,13 +56,13 @@ func (f files) deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error
 	}
 
 	// Stop processing if it's not recursive
-	if !isRecursive {
+	if !f.RecursiveOp {
 		return nil
 	}
 
 	// ******* process recursive call *********
 
-	subDirs, err := listDirs(dir, func(dirName string) bool {
+	subDirs, err := ListDirs(dir, func(dirName string) bool {
 		// ignore hidden dirs
 		return len(dirName) > 0 && dirName[0] != '.'
 	})
@@ -69,8 +71,8 @@ func (f files) deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error
 	}
 
 	for _, subDir := range subDirs {
-		subDirPath := path.Join(dir, subDir.Name())
-		if err := f.deleteFilesWithSuffix(isRecursive, subDirPath, suffix); err != nil {
+		subDirPath := path.Join(dir, subDir)
+		if err := f.deleteFilesWithSuffix(subDirPath, suffix); err != nil {
 			return err
 		}
 	}
@@ -78,42 +80,42 @@ func (f files) deleteFilesWithSuffix(isRecursive bool, dir, suffix string) error
 }
 
 // List returns the list of files and directories in the given dir
-func (f files) ListFiles(checkName func(string) bool) ([]os.FileInfo, error) {
-	return listFilesInDir(f.CurDir, checkName)
+func (f files) ListFiles(checkName func(string) bool) ([]string, error) {
+	return ListFilesInDir(f.CurDir, checkName)
 }
 
-func listFilesInDir(dir string, checkName func(string) bool) ([]os.FileInfo, error) {
+func ListFilesInDir(dir string, checkName func(string) bool) ([]string, error) {
 	ff, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return nil, fmt.Errorf("error reading path: %s :: %w", dir, err)
 	}
 
-	files := []os.FileInfo{}
+	var fileNames []string
 
 	for _, f := range ff {
 		if !f.IsDir() && checkName(f.Name()) {
-			files = append(files, f)
+			fileNames = append(fileNames, f.Name())
 		}
 	}
-	return files, nil
+	return fileNames, nil
 }
 
-func (f files) ListDirs(checkName func(string) bool) ([]os.FileInfo, error) {
-	return listDirs(f.CurDir, checkName)
+func (f files) ListDirs(checkName func(string) bool) ([]string, error) {
+	return ListDirs(f.CurDir, checkName)
 }
 
-func listDirs(dir string, checkName func(string) bool) ([]os.FileInfo, error) {
+func ListDirs(dir string, checkName func(string) bool) ([]string, error) {
 	ff, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return nil, fmt.Errorf("files.listDirs():: error reading path: %s :: %w", dir, err)
 	}
 
-	dirs := []os.FileInfo{}
+	var dirNames []string
 
 	for _, f := range ff {
 		if f.IsDir() && checkName(f.Name()) {
-			dirs = append(dirs, f)
+			dirNames = append(dirNames, f.Name())
 		}
 	}
-	return dirs, nil
+	return dirNames, nil
 }

@@ -30,12 +30,6 @@ func Tags(t []string) func(*generator) {
 	}
 }
 
-func NoSuffix(n bool) func(*generator) {
-	return func(g *generator) {
-		g.noSuffix = n
-	}
-}
-
 func Recursive(r bool) func(*generator) {
 	return func(g *generator) {
 		g.isRecursive = r

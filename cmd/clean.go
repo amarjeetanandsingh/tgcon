@@ -44,7 +44,9 @@ var cleanCmd = &cobra.Command{
 		)
 		if err := c.Do(); err != nil {
 			fmt.Println(err)
+			return
 		}
+		fmt.Println("Done.")
 	},
 }
 

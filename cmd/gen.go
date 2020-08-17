@@ -29,11 +29,7 @@ const (
 	genShortDoc = "generates struct field tag values as string constant"
 	genLongDoc  = `
 It generates string constants of struct field tag values. All constants are
-generated into a new file(with _tgconst_gen.go as suffix) for each package.
-
-Before each run, it deletes all previously generated _tgconst_gen.go files.
-If you don't want to delete previously generated _tgconst_gen.go files, you
-can use -noClean flag.`
+generated into a new file(with _tgconst_gen.go as suffix) for each package.`
 )
 
 var genCmd = &cobra.Command{
@@ -45,13 +41,15 @@ var genCmd = &cobra.Command{
 		g := gen.New(
 			gen.Dir(cfg.Dir),
 			gen.Tags(cfg.Tags),
-			gen.NoSuffix(cfg.NoSuffix),
 			gen.Recursive(cfg.IsRecursive),
 			gen.TaggedFieldOnly(cfg.OnlyTaggedFields),
 		)
+
 		if err := g.Do(); err != nil {
 			fmt.Println(err)
+			return
 		}
+		fmt.Println("Done.")
 	},
 }
 
@@ -61,7 +59,7 @@ func init() {
 	cfg := config.GetGeneratorCfg()
 	genCmd.Flags().BoolVarP(&cfg.NoSuffix, "noSuffix", "s", false, "Do not add tag value as const suffix")
 	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate constants for the given dir directory")
-	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{"json"}, "List of tags we are going to create constants for")
+	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{}, "List of tags we are going to create constants for")
 	genCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively create constants for all subdirectories too")
 	genCmd.Flags().BoolVarP(&cfg.OnlyTaggedFields, "onlyTagged", "e", false, " Escape empty tag fields. Do not create string constants for unTagged fields.")
 }
