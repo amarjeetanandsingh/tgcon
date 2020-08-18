@@ -24,10 +24,10 @@ import (
 	"io"
 	"os"
 	"path"
-	"strings"
 
 	"github.com/amarjeetanandsingh/tgconst/files"
 	"github.com/amarjeetanandsingh/tgconst/parser"
+	"github.com/amarjeetanandsingh/tgconst/text"
 )
 
 type generator struct {
@@ -172,7 +172,7 @@ func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 
 	noConstants := true
 	for _, parsedFile := range parsedFiles {
-		sourceCode.WriteString("// " + g.centerAlignedText("File: "+parsedFile.FileName) + "\n")
+		sourceCode.WriteString("// " + text.CenterAlignedPadded("File: "+parsedFile.FileName, "-") + "\n")
 
 		for _, parsedStruct := range parsedFile.Structs {
 			sourceCode.WriteString("// Struct: " + parsedStruct.Name + "\n")
@@ -186,10 +186,9 @@ func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 				}
 
 				// means generate tag constant for untagged field
-				if noConstants && !g.onlyTaggedFields {
-					// TODO(v2) add different schemes for constant for untagged fields
-					// currently mirror is supported.
-					newTagVal := g.generateNewTagValue(parsedField.Name)
+				if len(parsedField.Tags) == 0 && !g.onlyTaggedFields {
+					noConstants = false
+					newTagVal := text.Transform(parsedField.Name, text.SnakeCase) // todo: fetch from g.
 					line := parsedStruct.Name + "_" + parsedField.Name + "= \"" + newTagVal + "\""
 					sourceCode.WriteString("\t" + line + "\n")
 				}
@@ -206,22 +205,4 @@ func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 	}
 
 	return sourceCode.Bytes(), nil
-}
-
-func (g *generator) generateNewTagValue(fieldName string) string {
-	return fieldName
-}
-
-// Consider 60 char width
-// outputs "xyz" as "----  xyz  -------"
-func (g *generator) centerAlignedText(text string) string {
-	space := "  "
-
-	numOfDashEachSide := (60 - len(text) - len(space)*2) / 2
-	if numOfDashEachSide <= 0 {
-		return text
-	}
-
-	dashedString := strings.Repeat("-", numOfDashEachSide)
-	return dashedString + space + text + space + dashedString
 }
