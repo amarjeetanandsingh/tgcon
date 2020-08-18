@@ -16,6 +16,8 @@ limitations under the License.
 
 package gen
 
+import "github.com/amarjeetanandsingh/tgconst/text"
+
 // moved the option functions from gen.go to keep the logic clean out there
 
 func Dir(d string) func(*generator) {
@@ -39,5 +41,22 @@ func Recursive(r bool) func(*generator) {
 func TaggedFieldOnly(tagged bool) func(*generator) {
 	return func(g *generator) {
 		g.onlyTaggedFields = tagged
+	}
+}
+
+func MissingTagPolicy(policy string) func(*generator) {
+	return func(g *generator) {
+		switch policy {
+		case text.SnakeCase:
+			g.missingTagValFormat = text.SnakeCase
+		case text.CamelCase:
+			g.missingTagValFormat = text.CamelCase
+		case text.LispCase:
+			g.missingTagValFormat = text.LispCase
+		case text.PascalCase:
+			g.missingTagValFormat = text.PascalCase
+		default:
+			g.missingTagValFormat = text.Mirror
+		}
 	}
 }

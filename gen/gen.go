@@ -47,7 +47,7 @@ type generator struct {
 	//		type Str struct{ F1 int `json:"f1" bson:"f1"`}
 	//	Will return two const, 1) Str_F1_json, 2) Str_F1_bson
 	//	If noSuffix = true, it will create only one const per struct field, as `Str_F1`
-	//noSuffix bool
+	noSuffix bool
 
 	// Setting `isRecursive` true will generate const for all the subdirectories too.
 	// By default it generates const only for the current directory.
@@ -56,6 +56,12 @@ type generator struct {
 	// Generate const file for the given directory. If `isRecursive` flag is set,
 	// it will generate const file recursively for all its subdirectories too.
 	dir string
+
+	// todo: better name and doc
+	// Format to generate tag value for untagged fields
+	// possible values are [CamelCase, LispCase, PascalCase, SnakeCase, Mirror]
+	// Mirror is default value in case no(empty) TransformFormat was given
+	missingTagValFormat text.TransformFormat
 }
 
 func New(options ...func(*generator)) *generator {
@@ -65,6 +71,12 @@ func New(options ...func(*generator)) *generator {
 	for _, option := range options {
 		option(g)
 	}
+
+	// validate options
+	if g.onlyTaggedFields && len(g.missingTagValFormat) > 0 {
+		fmt.Println("Warning: missingTagValFormat ignored because onlyTagged flag is set")
+	}
+
 	return g
 }
 
@@ -188,7 +200,7 @@ func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 				// means generate tag constant for untagged field
 				if len(parsedField.Tags) == 0 && !g.onlyTaggedFields {
 					noConstants = false
-					newTagVal := text.Transform(parsedField.Name, text.SnakeCase) // todo: fetch from g.
+					newTagVal := text.Transform(parsedField.Name, g.missingTagValFormat) // todo: fetch from g.
 					line := parsedStruct.Name + "_" + parsedField.Name + "= \"" + newTagVal + "\""
 					sourceCode.WriteString("\t" + line + "\n")
 				}

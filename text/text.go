@@ -6,13 +6,14 @@ import (
 	"unicode/utf8"
 )
 
-type TransformScheme string
+type TransformFormat string
 
 const (
 	CamelCase  = "camelcase"
 	LispCase   = "lispcase"
 	PascalCase = "pascalcase"
 	SnakeCase  = "snakecase"
+	Mirror     = "mirror"
 
 	LineLength = 60
 )
@@ -32,17 +33,14 @@ func CenterAlignedPadded(str, padWith string) string {
 }
 
 // NOTE: This code is copied from https://github.com/fatih/gomodifytags/blob/master/main.go#L353
-func Transform(txt string, scheme TransformScheme) string {
+func Transform(txt string, format TransformFormat) string {
 	if len(txt) == 0 {
 		return ""
 	}
 
 	splitted := Split(txt)
-	if len(splitted) == 0 {
-		return txt
-	}
 
-	switch scheme {
+	switch format {
 	case SnakeCase:
 		var lowerSplitted []string
 		for _, s := range splitted {

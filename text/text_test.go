@@ -35,35 +35,35 @@ func TestTransform(t *testing.T) {
 	for _, test := range []struct {
 		input           string
 		want            string
-		transFormScheme TransformScheme
+		transFormFoamat TransformFormat
 	}{
 		{input: "", want: ""},
-		{input: "ONETWO", want: "onetwo", transFormScheme: SnakeCase},
-		{input: "OneTwo", want: "one_two", transFormScheme: SnakeCase},
-		{input: "oneTwo", want: "one_two", transFormScheme: SnakeCase},
-		{input: "onetwo", want: "onetwo", transFormScheme: SnakeCase},
-		{input: "ONE2", want: "one_2", transFormScheme: SnakeCase},
-		{input: "One2", want: "one_2", transFormScheme: SnakeCase},
-		{input: "one2", want: "one_2", transFormScheme: SnakeCase},
+		{input: "ONETWO", want: "onetwo", transFormFoamat: SnakeCase},
+		{input: "OneTwo", want: "one_two", transFormFoamat: SnakeCase},
+		{input: "oneTwo", want: "one_two", transFormFoamat: SnakeCase},
+		{input: "onetwo", want: "onetwo", transFormFoamat: SnakeCase},
+		{input: "ONE2", want: "one_2", transFormFoamat: SnakeCase},
+		{input: "One2", want: "one_2", transFormFoamat: SnakeCase},
+		{input: "one2", want: "one_2", transFormFoamat: SnakeCase},
 
-		{input: "ONETWO", want: "onetwo", transFormScheme: CamelCase},
-		{input: "OneTwo", want: "oneTwo", transFormScheme: CamelCase},
-		{input: "oneTwo", want: "oneTwo", transFormScheme: CamelCase},
-		{input: "onetwo", want: "onetwo", transFormScheme: CamelCase},
-		{input: "ONE2", want: "one2", transFormScheme: CamelCase},
-		{input: "One2", want: "one2", transFormScheme: CamelCase},
-		{input: "one2", want: "one2", transFormScheme: CamelCase},
+		{input: "ONETWO", want: "onetwo", transFormFoamat: CamelCase},
+		{input: "OneTwo", want: "oneTwo", transFormFoamat: CamelCase},
+		{input: "oneTwo", want: "oneTwo", transFormFoamat: CamelCase},
+		{input: "onetwo", want: "onetwo", transFormFoamat: CamelCase},
+		{input: "ONE2", want: "one2", transFormFoamat: CamelCase},
+		{input: "One2", want: "one2", transFormFoamat: CamelCase},
+		{input: "one2", want: "one2", transFormFoamat: CamelCase},
 
-		{input: "ONETWO", want: "ONETWO", transFormScheme: PascalCase},
-		{input: "OneTwo", want: "OneTwo", transFormScheme: PascalCase},
-		{input: "oneTwo", want: "OneTwo", transFormScheme: PascalCase},
-		{input: "onetwo", want: "Onetwo", transFormScheme: PascalCase},
-		{input: "ONE2", want: "ONE2", transFormScheme: PascalCase},
-		{input: "One2", want: "One2", transFormScheme: PascalCase},
-		{input: "one2", want: "One2", transFormScheme: PascalCase},
+		{input: "ONETWO", want: "ONETWO", transFormFoamat: PascalCase},
+		{input: "OneTwo", want: "OneTwo", transFormFoamat: PascalCase},
+		{input: "oneTwo", want: "OneTwo", transFormFoamat: PascalCase},
+		{input: "onetwo", want: "Onetwo", transFormFoamat: PascalCase},
+		{input: "ONE2", want: "ONE2", transFormFoamat: PascalCase},
+		{input: "One2", want: "One2", transFormFoamat: PascalCase},
+		{input: "one2", want: "One2", transFormFoamat: PascalCase},
 	} {
-		if got := Transform(test.input, test.transFormScheme); got != test.want {
-			t.Errorf("got: %s, want: %s, scheme: %s", got, test.want, test.transFormScheme)
+		if got := Transform(test.input, test.transFormFoamat); got != test.want {
+			t.Errorf("got: %s, want: %s, scheme: %s", got, test.want, test.transFormFoamat)
 		}
 	}
 }
