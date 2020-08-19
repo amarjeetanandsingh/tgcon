@@ -57,6 +57,9 @@ type generator struct {
 	// it will generate const file recursively for all its subdirectories too.
 	dir string
 
+	// process all structs irrespective of magic comment
+	allStructs bool
+
 	// todo: better name and doc
 	// Format to generate tag value for untagged fields
 	// possible values are [CamelCase, LispCase, PascalCase, SnakeCase, Mirror]
@@ -87,7 +90,7 @@ func (g *generator) Do() error {
 // TODO:: check with io.WriteClosure
 func (g *generator) generateConstantsFile(dir string) error {
 
-	p := parser.New("tgconst", g.tags, g.onlyTaggedFields)
+	p := parser.New("tgconst", g.tags, g.allStructs, g.onlyTaggedFields)
 	parsedFiles, err := p.ParseDir(dir)
 	if err != nil {
 		return err

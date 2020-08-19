@@ -39,6 +39,7 @@ var genCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.GetGeneratorCfg()
 		g := gen.New(
+			gen.All(cfg.All),
 			gen.Dir(cfg.Dir),
 			gen.Tags(cfg.Tags),
 			gen.Recursive(cfg.IsRecursive),
@@ -58,6 +59,7 @@ func init() {
 	rootCmd.AddCommand(genCmd)
 
 	cfg := config.GetGeneratorCfg()
+	genCmd.Flags().BoolVarP(&cfg.All, "all", "a", false, "process all structs irrespective of magic comment")
 	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate tag as constants for the given dir directory")
 	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{}, "Comma separated list of tags we are going to create constants for")
 	genCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively create constants for all subdirectories too")

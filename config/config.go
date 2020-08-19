@@ -23,6 +23,7 @@ type cleanerCfg struct {
 }
 
 type generatorCfg struct {
+	All                 bool
 	Dir                 string
 	Tags                []string
 	IsRecursive         bool

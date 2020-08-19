@@ -20,6 +20,12 @@ import "github.com/amarjeetanandsingh/tgconst/text"
 
 // moved the option functions from gen.go to keep the logic clean out there
 
+func All(all bool) func(*generator) {
+	return func(g *generator) {
+		g.allStructs = all
+	}
+}
+
 func Dir(d string) func(*generator) {
 	return func(g *generator) {
 		g.dir = d

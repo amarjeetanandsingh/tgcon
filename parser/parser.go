@@ -60,10 +60,14 @@ type parser struct {
 
 	// consider only tagged fields
 	onlyTaggedFields bool
+
+	// process all structs irrespective of magic comment
+	allStructs bool
 }
 
-func New(magicComment string, tags []string, onlyTaggedFields bool) *parser {
+func New(magicComment string, tags []string, allStructs, onlyTaggedFields bool) *parser {
 	p := &parser{
+		allStructs:       allStructs,
 		magicComment:     magicComment,
 		onlyTaggedFields: onlyTaggedFields,
 		tags:             map[string]bool{},
@@ -140,8 +144,10 @@ func (p parser) ParseFile(reader io.Reader) (parsedFile *File, err error) {
 					continue
 				}
 
-				// do not process struct if magic comment found neither in type doc nor for struct doc
-				if !isTypeDecAnnotated && !strings.Contains(typeSpec.Doc.Text(), p.magicComment) {
+				// !p.allStructs:- process all structs even if magic comment is not there.
+				// !isTypeDecAnnotated:- typeDec doesn't have the magic comment
+				// !strings.Contains(typeSpec.Doc.Text(), p.magicComment):- struct doesn't have magic comment
+				if !p.allStructs && !isTypeDecAnnotated && !strings.Contains(typeSpec.Doc.Text(), p.magicComment) {
 					continue
 				}
 
