@@ -25,7 +25,6 @@ type cleanerCfg struct {
 type generatorCfg struct {
 	Dir                 string
 	Tags                []string
-	NoSuffix            bool
 	IsRecursive         bool
 	OnlyTaggedFields    bool
 	MissingTagValFormat string

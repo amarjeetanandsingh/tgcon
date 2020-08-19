@@ -290,6 +290,7 @@ func (p parser) parseTag(tag string) []Tag {
 		if err != nil {
 			break
 		}
+		value = strings.Split(value, ",")[0]
 
 		// len(p.tags) == 0 means all tags allowed
 		// p.tags[key] == true means key is allowed

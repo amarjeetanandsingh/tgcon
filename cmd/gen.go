@@ -58,10 +58,9 @@ func init() {
 	rootCmd.AddCommand(genCmd)
 
 	cfg := config.GetGeneratorCfg()
-	genCmd.Flags().BoolVarP(&cfg.NoSuffix, "noSuffix", "s", false, "Do not add tag value as const suffix")
-	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate constants for the given dir directory")
+	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate tag as constants for the given dir directory")
 	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{}, "Comma separated list of tags we are going to create constants for")
 	genCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively create constants for all subdirectories too")
 	genCmd.Flags().BoolVarP(&cfg.OnlyTaggedFields, "onlyTagged", "e", false, "Escape empty tag fields. Do not create string constants for unTagged fields.")
-	genCmd.Flags().StringVar(&cfg.MissingTagValFormat, "missingTagValFormat", "", "policy to generate tag value for fields with no tags")
+	genCmd.Flags().StringVarP(&cfg.MissingTagValFormat, "missingTagValFormat", "f", "", "policy to generate tag value for fields with no tags. Currently supports [camelcase, lispcase, pascalcase, snakecase]")
 }

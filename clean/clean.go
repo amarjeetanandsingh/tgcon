@@ -46,7 +46,7 @@ func New(options ...func(c *cleaner)) *cleaner {
 	return c
 }
 
-// TODO:: make _tgconst_gen.go suffix as config
+// TODO:v2: make _tgconst_gen.go suffix as config
 func (c *cleaner) Do() error {
 	f := files.New(c.verbose, c.isRecursive, c.dir)
 	if err := f.DeleteFilesWithSuffix("_tgconst_gen.go"); err != nil {
