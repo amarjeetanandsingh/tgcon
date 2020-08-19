@@ -293,8 +293,9 @@ func (p parser) parseTag(tag string) []Tag {
 		value = strings.Split(value, ",")[0]
 
 		// len(p.tags) == 0 means all tags allowed
-		// p.tags[key] == true means key is allowed
-		if len(p.tags) == 0 || p.tags[key] {
+		// p.tags[key] == true means tag named `key` is allowed
+		// Only add a tag if there is a value. Treat it as untagged otherwise.
+		if (len(p.tags) == 0 || p.tags[key]) && value != "" {
 			tags = append(tags, Tag{
 				Name:  key,
 				Value: value,
