@@ -37,7 +37,7 @@ type generator struct {
 	// Do not create string constants for those fields which doesn't have tags.
 	// Ex: No const will be generated for F1 field of `struct{F1 int}` because
 	// it has no tag.
-	onlyTaggedFields bool
+	onlyTaggedFields bool // TODO:v1: defaultTagVal can be better name
 
 	// todo: v2 :
 	// 	By default it adds tag name as suffix to the const variable. When we have
@@ -114,7 +114,7 @@ func (g *generator) generateConstantsFile(dir string) error {
 		return nil
 	}
 
-	// if is recursive, continue for subdirectories also
+	// if is recursive, continue with sub-directories
 	subDirNames, err := files.ListDirs(dir, func(dirName string) bool {
 		// TODO comment this in doc
 		return len(dirName) > 0 && dirName[0] != '.'
@@ -174,7 +174,7 @@ func (g *generator) generateFormattedCode(parsedFiles []parser.File) ([]byte, er
 // whatever field tag has come here, simply write that.
 // creates formatted source code from parsedFile
 //
-//todo 2) generate tag value for no tag fields here
+// todo 2) generate tag value for no tag fields here
 func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 	if len(parsedFiles) == 0 {
 		return nil, nil
@@ -196,16 +196,16 @@ func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 				for _, tag := range parsedField.Tags {
 					noConstants = false // means at least 1 const is added.
 
-					line := parsedStruct.Name + "_" + parsedField.Name + "_" + tag.Name + "= \"" + tag.Value + "\""
-					sourceCode.WriteString("\t" + line + "\n")
+					line := g.generateLine(parsedStruct.Name, parsedField.Name, tag.Name, tag.Value)
+					sourceCode.WriteString(line + "\n")
 				}
 
-				// means generate tag constant for untagged field
+				// means generate tag constant value for parsedField which has no tags
 				if len(parsedField.Tags) == 0 && !g.onlyTaggedFields {
 					noConstants = false
-					newTagVal := text.Transform(parsedField.Name, g.missingTagValFormat) // todo: fetch from g.
-					line := parsedStruct.Name + "_" + parsedField.Name + "= \"" + newTagVal + "\""
-					sourceCode.WriteString("\t" + line + "\n")
+
+					line := g.generateLine(parsedStruct.Name, parsedField.Name, "", parsedField.Name)
+					sourceCode.WriteString(line + "\n")
 				}
 			}
 			sourceCode.WriteString("\n")
@@ -220,4 +220,22 @@ func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 	}
 
 	return sourceCode.Bytes(), nil
+}
+
+func (g *generator) generateLine(structName, FieldName, tagName, tagValue string) string {
+	words := make([]string, 0, 3)
+
+	if structName != "" {
+		words = append(words, structName)
+	}
+	if FieldName != "" {
+		words = append(words, FieldName)
+	}
+	if tagName != "" {
+		words = append(words, tagName)
+	}
+
+	constVariable := text.JoinFormatted(words, text.PascalCase) // TODO:vote: take from g.constVariableFormat
+	constValue := text.Format(tagValue, g.missingTagValFormat)
+	return constVariable + " = \"" + constValue + "\""
 }

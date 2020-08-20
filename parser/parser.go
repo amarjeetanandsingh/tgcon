@@ -231,6 +231,7 @@ func (p parser) parseStruct(typeSpec *ast.TypeSpec) (*Struct, error) {
 	return parsedStruct, nil
 }
 
+// Returns a list of tags which have non-empty values.
 func (p parser) parseTag(tag string) []Tag {
 	var tags []Tag
 
