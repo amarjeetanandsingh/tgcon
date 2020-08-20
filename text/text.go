@@ -32,46 +32,55 @@ func CenterAlignedPadded(str, padWith string) string {
 	return dashedString + space + str + space + dashedString
 }
 
-// NOTE: This code is copied from https://github.com/fatih/gomodifytags/blob/master/main.go#L353
-func Transform(txt string, format TransformFormat) string {
+func JoinFormatted(words []string, transformFormat TransformFormat) string {
+	if len(words) == 0 {
+		return ""
+	}
+
+	return format(words, transformFormat)
+}
+
+func Format(txt string, transformFormat TransformFormat) string {
 	if len(txt) == 0 {
 		return ""
 	}
 
-	splitted := Split(txt)
+	words := Split(txt)
+	return format(words, transformFormat)
+}
 
-	switch format {
+// NOTE: This code is copied from https://github.com/fatih/gomodifytags/blob/master/main.go#L353
+func format(words []string, transformFormat TransformFormat) string {
+	formattedWords := make([]string, 0, len(words))
+
+	switch transformFormat {
 	case SnakeCase:
-		var lowerSplitted []string
-		for _, s := range splitted {
-			lowerSplitted = append(lowerSplitted, strings.ToLower(s))
+		for _, w := range words {
+			formattedWords = append(formattedWords, strings.ToLower(w))
 		}
-		return strings.Join(lowerSplitted, "_")
+		return strings.Join(formattedWords, "_")
 
 	case LispCase:
-		var lowerSplitted []string
-		for _, s := range splitted {
-			lowerSplitted = append(lowerSplitted, strings.ToLower(s))
+		for _, w := range words {
+			formattedWords = append(formattedWords, strings.ToLower(w))
 		}
-		return strings.Join(lowerSplitted, "-")
+		return strings.Join(formattedWords, "-")
 
 	case CamelCase:
-		var titled []string
-		for _, s := range splitted {
-			titled = append(titled, strings.Title(s))
+		for _, w := range words {
+			formattedWords = append(formattedWords, strings.Title(w))
 		}
-		titled[0] = strings.ToLower(titled[0])
-		return strings.Join(titled, "")
+		formattedWords[0] = strings.ToLower(formattedWords[0])
+		return strings.Join(formattedWords, "")
 
 	case PascalCase:
-		var titled []string
-		for _, s := range splitted {
-			titled = append(titled, strings.Title(s))
+		for _, s := range words {
+			formattedWords = append(formattedWords, strings.Title(s))
 		}
-		return strings.Join(titled, "")
+		return strings.Join(formattedWords, "")
 	}
 
-	return txt
+	return strings.Join(words, "")
 }
 
 // NOTE: This code is copied from https://github.com/fatih/camelcase/blob/master/camelcase.go

@@ -18,6 +18,9 @@ package clean
 
 import (
 	"fmt"
+	"os"
+	"path"
+	"strings"
 
 	"github.com/amarjeetanandsingh/tgconst/files"
 )
@@ -48,9 +51,53 @@ func New(options ...func(c *cleaner)) *cleaner {
 
 // TODO:v2: make _tgconst_gen.go suffix as config
 func (c *cleaner) Do() error {
-	f := files.New(c.verbose, c.isRecursive, c.dir)
-	if err := f.DeleteFilesWithSuffix("_tgconst_gen.go"); err != nil {
+	if err := c.deleteFilesWithSuffix(c.dir, "_tgconst_gen.go"); err != nil {
 		return fmt.Errorf("error deleting %s suffix files in %s dir :: %w", "_tgconst_gen.go", c.dir, err)
+	}
+	return nil
+}
+
+func (c *cleaner) deleteFilesWithSuffix(dir, suffix string) error {
+	fileNames, err := files.ListFilesInDir(dir, func(fileName string) bool {
+		return strings.HasSuffix(fileName, suffix)
+	})
+	if err != nil {
+		return fmt.Errorf("files.ListFilesInDir():: error getting files. dir = %s, suffix=%s :: %w", dir, suffix, err)
+	}
+
+	// delete files in current directory
+	for _, fileName := range fileNames {
+		filePath := path.Join(dir, fileName)
+		if err := os.Remove(filePath); err != nil {
+			return fmt.Errorf("s.Remove(filePath):: error deleting %s file :: %w", filePath, err)
+		}
+
+		// log
+		if c.verbose {
+			fmt.Println("Deleted:", filePath)
+		}
+	}
+
+	// Stop processing if it's not recursive
+	if !c.isRecursive {
+		return nil
+	}
+
+	// ******* process recursive call *********
+
+	subDirs, err := files.ListDirs(dir, func(dirName string) bool {
+		// ignore hidden dirs
+		return len(dirName) > 0 && dirName[0] != '.'
+	})
+	if err != nil {
+		return fmt.Errorf("files.ListDirs():: error getting dirs. dir = %s :: %w", dir, err)
+	}
+
+	for _, subDir := range subDirs {
+		subDirPath := path.Join(dir, subDir)
+		if err := c.deleteFilesWithSuffix(subDirPath, suffix); err != nil {
+			return err
+		}
 	}
 	return nil
 }
