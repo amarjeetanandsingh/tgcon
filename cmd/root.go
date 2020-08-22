@@ -23,24 +23,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any sub-commands
-var rootCmd = &cobra.Command{
-	Use:   "tgconst",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
+// rootCmd represents the `tgconst` command when called without any sub-commands
+func NewRootCmd() *cobra.Command {
+	rootCmd := &cobra.Command{
+		Use:   "tgconst",
+		Short: "A brief description of your application",
+		Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	}
+	// add sub-commands
+	rootCmd.AddCommand(NewGenCmd())
+	rootCmd.AddCommand(NewCleanCmd())
+
+	return rootCmd
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	// add sub-commands
-	rootCmd.AddCommand(NewGenCmd())
-	rootCmd.AddCommand(NewCleanCmd())
+	rootCmd := NewRootCmd()
 
 	// execute command
 	if err := rootCmd.Execute(); err != nil {

@@ -38,28 +38,26 @@ func NewCleanCmd() *cobra.Command {
 		Long:  cleanLongDoc,
 		Short: cleanShortDoc,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c := clean.New(
+			cleaner := clean.New(
+				clean.StdOut(cmd.OutOrStdout()),
 				clean.Dir(config.GetCleanerCfg().Dir),
 				clean.Verbose(config.GetCleanerCfg().Verbose),
 				clean.Recursive(config.GetCleanerCfg().IsRecursive),
 			)
-			if err := c.Do(); err != nil {
+			if err := cleaner.Do(); err != nil {
 				return err
 			}
-			fmt.Println("Done.")
+			fmt.Fprintln(cmd.OutOrStdout(), "Done.")
 			return nil
 		},
 	}
 
-	// set flags
 	setCleanFlags(cleanCmd)
 
 	return cleanCmd
 }
 
 func setCleanFlags(cleanCmd *cobra.Command) {
-	rootCmd.AddCommand(cleanCmd)
-
 	cfg := config.GetCleanerCfg()
 	cleanCmd.Flags().BoolVarP(&cfg.Verbose, "verbose", "v", false, "verbose output")
 	cleanCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Delete generated const file from given directory")

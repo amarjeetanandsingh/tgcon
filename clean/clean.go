@@ -18,6 +18,7 @@ package clean
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"strings"
@@ -36,6 +37,9 @@ type cleaner struct {
 
 	// print all cleanup operations
 	verbose bool
+
+	// write to stdOut
+	stdOut io.Writer
 }
 
 func New(options ...func(c *cleaner)) *cleaner {
@@ -74,7 +78,7 @@ func (c *cleaner) deleteFilesWithSuffix(dir, suffix string) error {
 
 		// log
 		if c.verbose {
-			fmt.Println("Deleted:", filePath)
+			fmt.Fprintln(c.stdOut, "Deleted:", filePath)
 		}
 	}
 

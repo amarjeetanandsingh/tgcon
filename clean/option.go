@@ -16,6 +16,8 @@ limitations under the License.
 
 package clean
 
+import "io"
+
 // moved the option functions from clean.go to keep the logic clean out there
 
 func Dir(d string) func(*cleaner) {
@@ -33,5 +35,11 @@ func Recursive(isRecursive bool) func(*cleaner) {
 func Verbose(verbose bool) func(*cleaner) {
 	return func(c *cleaner) {
 		c.verbose = verbose
+	}
+}
+
+func StdOut(out io.Writer) func(*cleaner) {
+	return func(c *cleaner) {
+		c.stdOut = out
 	}
 }
