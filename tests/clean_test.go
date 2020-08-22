@@ -14,7 +14,7 @@ func TestCleanCmd(t *testing.T) {
 }
 
 func cleanCmd_Verbose(t *testing.T) {
-	if err := copyDirRecursive("./tests/testdata/onlyGenerated", "."); err != nil {
+	if err := copyDirRecursive("testdata/onlyGenerated", "."); err != nil {
 		t.Error(err)
 	}
 	cleanCmd, out := setupCleanCmd("clean", "--verbose")
