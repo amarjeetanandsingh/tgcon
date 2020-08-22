@@ -17,8 +17,17 @@ limitations under the License.
 // TODO:: Fix doc of whole project
 package main
 
-import "github.com/amarjeetanandsingh/tgconst/cmd"
+import (
+	"fmt"
+	"os"
+
+	"github.com/amarjeetanandsingh/tgconst/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	rootCmd := cmd.NewRootCmd()
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

@@ -11,13 +11,13 @@ func TestParseFile(t *testing.T) {
 	testFilePath := path.Join("testdata", "data.go")
 	reader, err := os.Open(testFilePath)
 	if err != nil {
-		t.Errorf("error reading test file: %s :: %w", testFilePath, err)
+		t.Errorf("error reading test file: %s :: "+err.Error(), testFilePath)
 	}
 
 	p := New("tgconst", nil, false, true)
 	file, err := p.ParseFile(reader)
 	if err != nil {
-		t.Errorf("error parsing file: %w", err)
+		t.Errorf("error parsing file:: " + err.Error())
 	}
 	log.Println(file)
 }

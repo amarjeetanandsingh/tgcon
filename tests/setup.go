@@ -7,13 +7,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 
 	"github.com/amarjeetanandsingh/tgconst/cmd"
 	"github.com/spf13/cobra"
 )
-
-func emptyRun(*cobra.Command, []string) {}
 
 func setupRootCmd(args ...string) (*cobra.Command, *bytes.Buffer) {
 	cmd := cmd.NewRootCmd()
@@ -94,14 +91,4 @@ func copyFile(src, dst string) error {
 		return err
 	}
 	return os.Chmod(dst, srcinfo.Mode())
-}
-
-func countFileWithSuffix(files []string, suffix string) int {
-	c := 0
-	for _, file := range files {
-		if strings.HasSuffix(file, suffix) {
-			c++
-		}
-	}
-	return c
 }

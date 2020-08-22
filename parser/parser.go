@@ -83,7 +83,7 @@ func New(magicComment string, tags []string, allStructs, onlyTaggedFields bool) 
 func (p parser) ParseDir(dir string) ([]File, error) {
 	filesInfo, err := ioutil.ReadDir(dir)
 	if err != nil {
-		return nil, fmt.Errorf("cannot read directory: %s :: %w", dir, err)
+		return nil, fmt.Errorf("cannot read directory: %s :: "+err.Error(), dir)
 	}
 
 	var parsedFiles []File
@@ -103,13 +103,13 @@ func (p parser) ParseDir(dir string) ([]File, error) {
 		filePath := path.Join(dir, file.Name())
 		reader, err := os.Open(filePath)
 		if err != nil {
-			return nil, fmt.Errorf("error opening file: %s :: %w", filePath, err)
+			return nil, fmt.Errorf("error opening file: %s :: " + err.Error(), filePath)
 		}
 
 		parsedFile, err := p.ParseFile(reader)
 		reader.Close()
 		if err != nil {
-			return nil, fmt.Errorf("error parsing file: %s :: %w", filePath, err)
+			return nil, fmt.Errorf("error parsing file: %s :: " + err.Error(), filePath)
 		}
 
 		if parsedFile != nil {

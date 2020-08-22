@@ -104,10 +104,10 @@ func (g *generator) generateConstantsFile(dir string) error {
 	generatedFilePath := path.Join(dir, parsedFiles[0].PackageName+"_tgconst_gen.go")
 	generatedFileWriter, err := os.OpenFile(generatedFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
-		return fmt.Errorf("error creating generated file %s: %w", generatedFilePath, err)
+		return fmt.Errorf("error creating generated file %s: "+err.Error(), generatedFilePath)
 	}
 	if err := g.generateAndWrite(parsedFiles, generatedFileWriter); err != nil {
-		return fmt.Errorf("error writing to generated file %s: %w", generatedFilePath, err)
+		return fmt.Errorf("error writing to generated file %s :: "+err.Error(), generatedFilePath)
 	}
 
 	if !g.isRecursive {
@@ -120,7 +120,7 @@ func (g *generator) generateConstantsFile(dir string) error {
 		return len(dirName) > 0 && dirName[0] != '.'
 	})
 	if err != nil {
-		return fmt.Errorf("error listing subdirs of %s :: %w", dir, err)
+		return fmt.Errorf("error listing subdirs of %s :: " + err.Error(), dir)
 	}
 	for _, subDir := range subDirNames {
 		if err := g.generateConstantsFile(path.Join(dir, subDir)); err != nil {
@@ -143,10 +143,10 @@ func (g *generator) generateAndWrite(parsedFiles []parser.File, writer io.Writer
 
 	bw := bufio.NewWriter(writer)
 	if _, err := bw.Write(formattedCode); err != nil {
-		return fmt.Errorf("error writing formatted code to writer: %w", err)
+		return fmt.Errorf("error writing formatted code to writer :: " + err.Error())
 	}
 	if err := bw.Flush(); err != nil {
-		return fmt.Errorf("error flushing formatted code to writer: %w", err)
+		return fmt.Errorf("error flushing formatted code to writer :: "+err.Error())
 	}
 
 	return nil
@@ -164,7 +164,7 @@ func (g *generator) generateFormattedCode(parsedFiles []parser.File) ([]byte, er
 
 	formattedSource, err := format.Source(generatedCode)
 	if err != nil {
-		return nil, fmt.Errorf("error formatting generated source code: %w", err)
+		return nil, fmt.Errorf("error formatting generated source code :: " + err.Error())
 	}
 
 	return formattedSource, nil

@@ -59,7 +59,7 @@ func TestGenerateAndWrite(t *testing.T) {
 	parsedFiles := []parser.File{parsedFile}
 	g := New()
 	if err := g.generateAndWrite(parsedFiles, writer); err != nil {
-		t.Errorf("error writing parsed value to writer:: %w", err)
+		t.Errorf("error writing parsed value to writer:: "+err.Error())
 	}
 
 	//
@@ -73,7 +73,7 @@ func TestTaggedFieldOnly(t *testing.T) {
 
 	writer := &bytes.Buffer{}
 	if err := g.generateAndWrite(parsedFiles_taggedOnly, writer); err != nil {
-		t.Errorf("error in generateAndWrite. Error: %w", err)
+		t.Errorf("error in generateAndWrite. Error: "+err.Error())
 	}
 	output := writer.String()
 	if strings.Contains(output, "UntaggedField") {
@@ -87,7 +87,7 @@ func TestTaggedOnly_AllowedTags(t *testing.T) {
 	//
 	//writer := &bytes.Buffer{}
 	//if err := g.generateAndWrite(parsedFiles_taggedOnly, writer); err != nil {
-	//	t.Errorf("error in generateAndWrite. Error: %w", err)
+	//	t.Errorf("error in generateAndWrite. Error: "+ err.Error())
 	//}
 	//got := writer.String()
 	//if got != generatedCode_taggedOnly {

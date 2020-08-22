@@ -66,14 +66,14 @@ func (c *cleaner) deleteFilesWithSuffix(dir, suffix string) error {
 		return strings.HasSuffix(fileName, suffix)
 	})
 	if err != nil {
-		return fmt.Errorf("files.ListFilesInDir():: error getting files. dir = %s, suffix=%s :: %w", dir, suffix, err)
+		return fmt.Errorf("files.ListFilesInDir():: error getting files. dir = %s, suffix=%s :: " + err.Error(), dir, suffix)
 	}
 
 	// delete files in current directory
 	for _, fileName := range fileNames {
 		filePath := path.Join(dir, fileName)
 		if err := os.Remove(filePath); err != nil {
-			return fmt.Errorf("s.Remove(filePath):: error deleting %s file :: %w", filePath, err)
+			return fmt.Errorf("s.Remove(filePath):: error deleting %s file :: " + err.Error(), filePath)
 		}
 
 		// log
@@ -94,7 +94,7 @@ func (c *cleaner) deleteFilesWithSuffix(dir, suffix string) error {
 		return len(dirName) > 0 && dirName[0] != '.'
 	})
 	if err != nil {
-		return fmt.Errorf("files.ListDirs():: error getting dirs. dir = %s :: %w", dir, err)
+		return fmt.Errorf("files.ListDirs():: error getting dirs. dir = %s :: " + err.Error(), dir)
 	}
 
 	for _, subDir := range subDirs {
