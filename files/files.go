@@ -19,6 +19,8 @@ package files
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 // ListFilesInDir returns the list of all files inside the given dir, satisfying
@@ -36,6 +38,22 @@ func ListFilesInDir(dir string, checkName func(string) bool) ([]string, error) {
 			fileNames = append(fileNames, f.Name())
 		}
 	}
+	return fileNames, nil
+}
+
+// ListFilesInDirRecursive returns list of all files in given dir and its sub directory.
+func ListFilesInDirRecursive(dir string, checkName func(string) bool) ([]string, error) {
+	fileNames := []string{}
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && checkName(info.Name()) {
+			fileNames = append(fileNames, info.Name())
+		}
+		return nil
+	})
 	return fileNames, nil
 }
 

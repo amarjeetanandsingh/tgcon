@@ -12,10 +12,14 @@ env:
     - GO111MODULE=on
 
 script:
-  - go test ./...
-  - go build
+  - go test -race -coverprofile=cover.out -coverpkg=./... ./...
+  - go tool cover -html=cover.out -o cover.html
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:
     on_success: never
     on_failure: always
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

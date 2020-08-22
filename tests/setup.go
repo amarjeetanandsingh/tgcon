@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/amarjeetanandsingh/tgconst/cmd"
 	"github.com/spf13/cobra"
@@ -14,7 +15,7 @@ import (
 
 func emptyRun(*cobra.Command, []string) {}
 
-func setupCleanCmd(args ...string) (*cobra.Command, *bytes.Buffer) {
+func setupRootCmd(args ...string) (*cobra.Command, *bytes.Buffer) {
 	cmd := cmd.NewRootCmd()
 	buf := new(bytes.Buffer)
 	cmd.SetOut(buf)
@@ -22,22 +23,18 @@ func setupCleanCmd(args ...string) (*cobra.Command, *bytes.Buffer) {
 	return cmd, buf
 }
 
-func setupGenCmd(args ...string) *cobra.Command {
-	genCmd := cmd.NewGenCmd()
-	genCmd.SetArgs(args)
-	return genCmd
-}
-
-func copyDirToTmp(src string) (string, error) {
+func copyDirToTmp(src string) (string, func(), error) {
 	tmpDir, err := ioutil.TempDir("", "tgconst")
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	if err := copyDirRecursive(src, tmpDir); err != nil {
-		return "", err
+		return "", nil, err
 	}
-	return tmpDir, nil
+
+	cleanupFunc := func() { os.RemoveAll(tmpDir) }
+	return tmpDir, cleanupFunc, nil
 }
 
 func copyDirRecursive(src, dst string) error {
@@ -97,4 +94,14 @@ func copyFile(src, dst string) error {
 		return err
 	}
 	return os.Chmod(dst, srcinfo.Mode())
+}
+
+func countFileWithSuffix(files []string, suffix string) int {
+	c := 0
+	for _, file := range files {
+		if strings.HasSuffix(file, suffix) {
+			c++
+		}
+	}
+	return c
 }
