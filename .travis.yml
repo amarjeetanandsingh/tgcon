@@ -1,16 +1,20 @@
 language: go
 
 go:
+  - 1.11.x
   - 1.13.x
+  - master
 
 go_import_path: github.com/amarjeetanandsingh/tgconst
 
+env:
+  global:
+    - GO111MODULE=on
+
 script:
   - go build
+
 notifications:
   email:
-    #    recipients:
-    #      - one@example.com
-    #      - other@example.com
     on_success: never
     on_failure: always
