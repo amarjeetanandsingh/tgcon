@@ -51,33 +51,32 @@ func Format(txt string, transformFormat TransformFormat) string {
 
 // NOTE: This code is copied from https://github.com/fatih/gomodifytags/blob/master/main.go#L353
 func format(words []string, transformFormat TransformFormat) string {
-	formattedWords := make([]string, 0, len(words))
 
 	switch transformFormat {
 	case SnakeCase:
-		for _, w := range words {
-			formattedWords = append(formattedWords, strings.ToLower(w))
+		for i, w := range words {
+			words[i] = strings.ToLower(w)
 		}
-		return strings.Join(formattedWords, "_")
+		return strings.Join(words, "_")
 
 	case LispCase:
-		for _, w := range words {
-			formattedWords = append(formattedWords, strings.ToLower(w))
+		for i, w := range words {
+			words[i] = strings.ToLower(w)
 		}
-		return strings.Join(formattedWords, "-")
+		return strings.Join(words, "-")
 
 	case CamelCase:
-		for _, w := range words {
-			formattedWords = append(formattedWords, strings.Title(w))
+		for i, w := range words {
+			words[i] = strings.Title(w)
 		}
-		formattedWords[0] = strings.ToLower(formattedWords[0])
-		return strings.Join(formattedWords, "")
+		words[0] = strings.ToLower(words[0])
+		return strings.Join(words, "")
 
 	case PascalCase:
-		for _, s := range words {
-			formattedWords = append(formattedWords, strings.Title(s))
+		for i, w := range words {
+			words[i] = strings.Title(w)
 		}
-		return strings.Join(formattedWords, "")
+		return strings.Join(words, "")
 	}
 
 	return strings.Join(words, "")

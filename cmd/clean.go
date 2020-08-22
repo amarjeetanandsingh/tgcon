@@ -31,26 +31,33 @@ const (
 	cleanLongDoc  = ""
 )
 
-// cleanCmd represents the clean command
-var cleanCmd = &cobra.Command{
-	Use:   "clean",
-	Long:  cleanLongDoc,
-	Short: cleanShortDoc,
-	Run: func(cmd *cobra.Command, args []string) {
-		c := clean.New(
-			clean.Dir(config.GetCleanerCfg().Dir),
-			clean.Verbose(config.GetCleanerCfg().Verbose),
-			clean.Recursive(config.GetCleanerCfg().IsRecursive),
-		)
-		if err := c.Do(); err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println("Done.")
-	},
+// cleanCmd represents the clean sub-command
+func NewCleanCmd() *cobra.Command {
+	cleanCmd := &cobra.Command{
+		Use:   "clean",
+		Long:  cleanLongDoc,
+		Short: cleanShortDoc,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			c := clean.New(
+				clean.Dir(config.GetCleanerCfg().Dir),
+				clean.Verbose(config.GetCleanerCfg().Verbose),
+				clean.Recursive(config.GetCleanerCfg().IsRecursive),
+			)
+			if err := c.Do(); err != nil {
+				return err
+			}
+			fmt.Println("Done.")
+			return nil
+		},
+	}
+
+	// set flags
+	setCleanFlags(cleanCmd)
+
+	return cleanCmd
 }
 
-func init() {
+func setCleanFlags(cleanCmd *cobra.Command) {
 	rootCmd.AddCommand(cleanCmd)
 
 	cfg := config.GetCleanerCfg()

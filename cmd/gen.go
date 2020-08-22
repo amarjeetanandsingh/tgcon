@@ -32,32 +32,37 @@ It generates string constants of struct field tag values. All constants are
 generated into a new file(with _tgconst_gen.go as suffix) for each package.`
 )
 
-var genCmd = &cobra.Command{
-	Use:   "gen",
-	Short: genShortDoc,
-	Long:  genLongDoc,
-	Run: func(cmd *cobra.Command, args []string) {
-		cfg := config.GetGeneratorCfg()
-		g := gen.New(
-			gen.All(cfg.All),
-			gen.Dir(cfg.Dir),
-			gen.Tags(cfg.Tags),
-			gen.Recursive(cfg.IsRecursive),
-			gen.TaggedFieldOnly(cfg.OnlyTaggedFields),
-			gen.MissingTagPolicy(cfg.MissingTagValFormat),
-		)
+func NewGenCmd() *cobra.Command {
+	genCmd := &cobra.Command{
+		Use:   "gen",
+		Short: genShortDoc,
+		Long:  genLongDoc,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cfg := config.GetGeneratorCfg()
+			generator := gen.New(
+				gen.All(cfg.All),
+				gen.Dir(cfg.Dir),
+				gen.Tags(cfg.Tags),
+				gen.Recursive(cfg.IsRecursive),
+				gen.TaggedFieldOnly(cfg.OnlyTaggedFields),
+				gen.MissingTagPolicy(cfg.MissingTagValFormat),
+			)
 
-		if err := g.Do(); err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println("Done.")
-	},
+			if err := generator.Do(); err != nil {
+				return err
+			}
+			fmt.Println("Done.")
+			return nil
+		},
+	}
+
+	// set flags
+	setGenFlags(genCmd)
+
+	return genCmd
 }
 
-func init() {
-	rootCmd.AddCommand(genCmd)
-
+func setGenFlags(genCmd *cobra.Command) {
 	cfg := config.GetGeneratorCfg()
 	genCmd.Flags().BoolVarP(&cfg.All, "all", "a", false, "process all structs irrespective of magic comment")
 	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate tag as constants for the given dir directory")
