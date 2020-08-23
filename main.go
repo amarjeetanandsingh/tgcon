@@ -14,20 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO:: Fix doc of whole project
+// tgcon generates struct field tag values as string constants.
+// Default tag val format for untagged fields is
 package main
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/amarjeetanandsingh/tgconst/cmd"
+	"github.com/amarjeetanandsingh/tgcon/cmd"
 )
 
 func main() {
 	rootCmd := cmd.NewRootCmd()
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
 }

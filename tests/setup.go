@@ -8,7 +8,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/amarjeetanandsingh/tgconst/cmd"
+	"github.com/amarjeetanandsingh/tgcon/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +21,7 @@ func setupRootCmd(args ...string) (*cobra.Command, *bytes.Buffer) {
 }
 
 func copyDirToTmp(src string) (string, func(), error) {
-	tmpDir, err := ioutil.TempDir("", "tgconst")
+	tmpDir, err := ioutil.TempDir("", "tgcon")
 	if err != nil {
 		return "", nil, err
 	}

@@ -17,17 +17,17 @@ import (
 type parser struct {
 
 	/*
-		`tgconst` is a magic comment which makes a struct eligible to be parsed.
+		`tgcon` is a magic comment which makes a struct eligible to be parsed.
 		In the code below, fields of struct Foo, Bar, Baz and Qux will be parsed because
-		they have magic comment(tgconst) associated with them.
+		they have magic comment(tgcon) associated with them.
 
 		```
-		// tgconst
+		// tgcon
 		type Foo struct {
 			F1 int `json:"f1"`
 		}
 
-		// tgconst
+		// tgcon
 		type (
 			Bar struct {
 				F1 int `json:"f1"`
@@ -37,7 +37,7 @@ type parser struct {
 			}
 		)
 		type (
-			// tgconst
+			// tgcon
 			Qux struct {
 				F1 int `json:"f1"`
 			}

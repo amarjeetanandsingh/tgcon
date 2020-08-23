@@ -23,7 +23,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/amarjeetanandsingh/tgconst/files"
+	"github.com/amarjeetanandsingh/tgcon/files"
 )
 
 type cleaner struct {

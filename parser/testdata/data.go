@@ -1,13 +1,13 @@
 package testdata
 
-// tgconst
+// tgcon
 type MagicCommentedStruct1 struct {
 	UnTaggedField    int
 	SingleTagField   int `json:"signeTagVal"`
 	MultiTaggedField int `json:"jsonTagVal" fooTag:"fooTagVal"`
 }
 
-// tgconst
+// tgcon
 type (
 	Bar struct {
 		F1 int `json:"bartag"`
@@ -18,7 +18,7 @@ type (
 )
 
 type (
-	// tgconst
+	// tgcon
 	Qux struct {
 		F1 int `json:"quxtag"`
 	}
@@ -31,7 +31,7 @@ type Xyz struct {
 	F1 int `json:"xyz_tag"`
 }
 
-// tgconst
+// tgcon
 type StructA struct {
 	NameA string `json:"name_a" xml:"name_a_xml"`
 	AgeA  int    `json:"age_a" xml:"age_a_xml"`
@@ -42,7 +42,7 @@ type StructB struct {
 	AgeB  int
 }
 
-// tgconst
+// tgcon
 type (
 	// StructC struct comment
 	StructC struct {

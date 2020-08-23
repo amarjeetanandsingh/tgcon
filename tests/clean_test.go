@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/amarjeetanandsingh/tgconst/files"
+	"github.com/amarjeetanandsingh/tgcon/files"
 )
 
 func TestCleanCmd(t *testing.T) {
@@ -19,7 +19,7 @@ func TestCleanCmd(t *testing.T) {
 
 func cleanCmd_Verbose(t *testing.T) {
 
-	// generate a tmp file to be cleaned by tgconst clean
+	// generate a tmp file to be cleaned by tgcon clean
 	generatedFile, err := ioutil.TempFile(".", "*_tgconst_gen.go")
 	if err != nil {
 		t.Error(err)

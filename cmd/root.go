@@ -20,17 +20,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the `tgconst` command when called without any sub-commands
+const (
+	rootCmdShortDoc = "tgcon generates struct field tag values as string constants."
+	rootCmdLongDoc  = "tgcon generates struct field tag values as string constants."
+)
+
+// rootCmd represents the `tgcon` command when called without any sub-commands
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
-		Use:   "tgconst",
-		Short: "A brief description of your application",
-		Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+		Use:   "tgcon",
+		Long:  rootCmdLongDoc,
+		Short: rootCmdShortDoc,
 	}
 	// add sub-commands
 	rootCmd.AddCommand(NewGenCmd())

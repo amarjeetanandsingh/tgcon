@@ -1,4 +1,4 @@
-module github.com/amarjeetanandsingh/tgconst
+module github.com/amarjeetanandsingh/tgcon
 
 go 1.13
 

@@ -19,8 +19,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/amarjeetanandsingh/tgconst/clean"
-	"github.com/amarjeetanandsingh/tgconst/config"
+	"github.com/amarjeetanandsingh/tgcon/clean"
+	"github.com/amarjeetanandsingh/tgcon/config"
 
 	"github.com/spf13/cobra"
 )

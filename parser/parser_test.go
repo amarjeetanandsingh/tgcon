@@ -14,7 +14,7 @@ func TestParseFile(t *testing.T) {
 		t.Errorf("error reading test file: %s :: "+err.Error(), testFilePath)
 	}
 
-	p := New("tgconst", nil, false, true)
+	p := New("tgcon", nil, false, true)
 	file, err := p.ParseFile(reader)
 	if err != nil {
 		t.Errorf("error parsing file:: " + err.Error())

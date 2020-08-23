@@ -16,7 +16,7 @@ limitations under the License.
 
 package gen
 
-import "github.com/amarjeetanandsingh/tgconst/text"
+import "github.com/amarjeetanandsingh/tgcon/text"
 
 // moved the option functions from gen.go to keep the logic clean out there
 
