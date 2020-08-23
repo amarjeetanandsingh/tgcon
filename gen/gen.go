@@ -120,7 +120,7 @@ func (g *generator) generateConstantsFile(dir string) error {
 		return len(dirName) > 0 && dirName[0] != '.'
 	})
 	if err != nil {
-		return fmt.Errorf("error listing subdirs of %s :: " + err.Error(), dir)
+		return fmt.Errorf("error listing subdirs of %s :: "+err.Error(), dir)
 	}
 	for _, subDir := range subDirNames {
 		if err := g.generateConstantsFile(path.Join(dir, subDir)); err != nil {
@@ -146,7 +146,7 @@ func (g *generator) generateAndWrite(parsedFiles []parser.File, writer io.Writer
 		return fmt.Errorf("error writing formatted code to writer :: " + err.Error())
 	}
 	if err := bw.Flush(); err != nil {
-		return fmt.Errorf("error flushing formatted code to writer :: "+err.Error())
+		return fmt.Errorf("error flushing formatted code to writer :: " + err.Error())
 	}
 
 	return nil
@@ -170,11 +170,6 @@ func (g *generator) generateFormattedCode(parsedFiles []parser.File) ([]byte, er
 	return formattedSource, nil
 }
 
-// todo 1)filter tags in parser itself.
-// whatever field tag has come here, simply write that.
-// creates formatted source code from parsedFile
-//
-// todo 2) generate tag value for no tag fields here
 func (g *generator) generateCode(parsedFiles []parser.File) ([]byte, error) {
 	if len(parsedFiles) == 0 {
 		return nil, nil

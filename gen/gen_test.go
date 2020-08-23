@@ -18,8 +18,8 @@ var parsedFiles_taggedOnly = []parser.File{
 				Name: "MagicCommentStruct",
 				Fields: []parser.Field{
 					// {Name: "UntaggedField"}, tagged only
-					{Name: "OneTagField", Tags: []parser.Tag{{"tagKey", "tagVal"}}},
-					{Name: "TwoTagField", Tags: []parser.Tag{{"tag1Key", "tag1Val"}, {"tag2Key", "tag2Val"}}},
+					{Name: "OneTagField", Tags: []parser.Tag{{Name: "tagKey", Value: "tagVal"}}},
+					{Name: "TwoTagField", Tags: []parser.Tag{{Name: "tag1Key", Value: "tag1Val"}, {Name: "tag2Key", Value: "tag2Val"}}},
 				},
 			},
 		},
@@ -49,8 +49,8 @@ func TestGenerateAndWrite(t *testing.T) {
 			Name: "MagicCommentStruct",
 			Fields: []parser.Field{
 				{Name: "UntaggedField"},
-				{Name: "OneTagField", Tags: []parser.Tag{{"tagKey", "tagVal"}}},
-				{Name: "TwoTagField", Tags: []parser.Tag{{"tag1Key", "tag1Val"}, {"tag2Key", "tag2Val"}}},
+				{Name: "OneTagField", Tags: []parser.Tag{{Name: "tagKey", Value: "tagVal"}}},
+				{Name: "TwoTagField", Tags: []parser.Tag{{Name: "tag1Key", Value: "tag1Val"}, {Name: "tag2Key", Value: "tag2Val"}}},
 			},
 		},
 	}
@@ -59,7 +59,7 @@ func TestGenerateAndWrite(t *testing.T) {
 	parsedFiles := []parser.File{parsedFile}
 	g := New()
 	if err := g.generateAndWrite(parsedFiles, writer); err != nil {
-		t.Errorf("error writing parsed value to writer:: "+err.Error())
+		t.Errorf("error writing parsed value to writer:: " + err.Error())
 	}
 
 	//
@@ -73,7 +73,7 @@ func TestTaggedFieldOnly(t *testing.T) {
 
 	writer := &bytes.Buffer{}
 	if err := g.generateAndWrite(parsedFiles_taggedOnly, writer); err != nil {
-		t.Errorf("error in generateAndWrite. Error: "+err.Error())
+		t.Errorf("error in generateAndWrite. Error: " + err.Error())
 	}
 	output := writer.String()
 	if strings.Contains(output, "UntaggedField") {

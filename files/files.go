@@ -28,7 +28,7 @@ import (
 func ListFilesInDir(dir string, checkName func(string) bool) ([]string, error) {
 	ff, err := ioutil.ReadDir(dir)
 	if err != nil {
-		return nil, fmt.Errorf("files.ListFilesInDir() :: error reading path: %s :: " + err.Error(), dir)
+		return nil, fmt.Errorf("files.ListFilesInDir() :: error reading path: %s :: "+err.Error(), dir)
 	}
 
 	var fileNames []string
@@ -63,7 +63,7 @@ func ListFilesInDirRecursive(dir string, checkName func(string) bool) ([]string,
 func ListDirs(dir string, checkName func(string) bool) ([]string, error) {
 	ff, err := ioutil.ReadDir(dir)
 	if err != nil {
-		return nil, fmt.Errorf("files.listDirs():: error reading path: %s :: " + err.Error(), dir)
+		return nil, fmt.Errorf("files.listDirs():: error reading path: %s :: "+err.Error(), dir)
 	}
 
 	var dirNames []string

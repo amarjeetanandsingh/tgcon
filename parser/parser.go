@@ -103,13 +103,13 @@ func (p parser) ParseDir(dir string) ([]File, error) {
 		filePath := path.Join(dir, file.Name())
 		reader, err := os.Open(filePath)
 		if err != nil {
-			return nil, fmt.Errorf("error opening file: %s :: " + err.Error(), filePath)
+			return nil, fmt.Errorf("error opening file: %s :: "+err.Error(), filePath)
 		}
 
 		parsedFile, err := p.ParseFile(reader)
 		reader.Close()
 		if err != nil {
-			return nil, fmt.Errorf("error parsing file: %s :: " + err.Error(), filePath)
+			return nil, fmt.Errorf("error parsing file: %s :: "+err.Error(), filePath)
 		}
 
 		if parsedFile != nil {
@@ -232,6 +232,8 @@ func (p parser) parseStruct(typeSpec *ast.TypeSpec) (*Struct, error) {
 }
 
 // Returns a list of tags which have non-empty values.
+// NOTE: This is modified version of code at
+// https://github.com/fatih/structtag/blob/6f4f1b943913eb6898ee5ab4c2e75a3b4bafe04c/tags.go#L42
 func (p parser) parseTag(tag string) []Tag {
 	var tags []Tag
 
