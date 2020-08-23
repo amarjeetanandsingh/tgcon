@@ -64,7 +64,7 @@ type generator struct {
 	// Format to generate tag value for untagged fields
 	// possible values are [CamelCase, LispCase, PascalCase, SnakeCase, Mirror]
 	// Mirror is default value in case no(empty) TransformFormat was given
-	missingTagValFormat text.TransformFormat
+	defaultTagValFormat text.TransformFormat
 }
 
 func New(options ...func(*generator)) *generator {
@@ -76,8 +76,8 @@ func New(options ...func(*generator)) *generator {
 	}
 
 	// validate options
-	if g.onlyTaggedFields && len(g.missingTagValFormat) > 0 {
-		fmt.Println("Warning: missingTagValFormat ignored because onlyTagged flag is set")
+	if g.onlyTaggedFields && len(g.defaultTagValFormat) > 0 {
+		fmt.Println("Warning: defaultTagValFormat ignored because onlyTagged flag is set")
 	}
 
 	return g
@@ -87,7 +87,6 @@ func (g *generator) Do() error {
 	return g.generateConstantsFile(g.dir)
 }
 
-// TODO:: check with io.WriteClosure
 func (g *generator) generateConstantsFile(dir string) error {
 
 	p := parser.New("tgconst", g.tags, g.allStructs, g.onlyTaggedFields)
@@ -99,9 +98,7 @@ func (g *generator) generateConstantsFile(dir string) error {
 		return nil
 	}
 
-	// TODO expecting all files in a directory will have same package.
-	// Verify this!!!
-	generatedFilePath := path.Join(dir, parsedFiles[0].PackageName+"_tgconst_gen.go")
+	generatedFilePath := path.Join(dir, dir+"_tgconst_gen.go")
 	generatedFileWriter, err := os.OpenFile(generatedFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return fmt.Errorf("error creating generated file %s: "+err.Error(), generatedFilePath)
@@ -231,6 +228,6 @@ func (g *generator) generateLine(structName, FieldName, tagName, tagValue string
 	}
 
 	constVariable := text.JoinFormatted(words, text.PascalCase) // TODO:vote: take from g.constVariableFormat
-	constValue := text.Format(tagValue, g.missingTagValFormat)
+	constValue := text.Format(tagValue, g.defaultTagValFormat)
 	return constVariable + " = \"" + constValue + "\""
 }

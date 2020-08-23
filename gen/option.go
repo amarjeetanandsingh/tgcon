@@ -50,19 +50,19 @@ func TaggedFieldOnly(tagged bool) func(*generator) {
 	}
 }
 
-func MissingTagPolicy(policy string) func(*generator) {
+func DefaultTagValFormat(policy string) func(*generator) {
 	return func(g *generator) {
 		switch policy {
 		case text.SnakeCase:
-			g.missingTagValFormat = text.SnakeCase
+			g.defaultTagValFormat = text.SnakeCase
 		case text.CamelCase:
-			g.missingTagValFormat = text.CamelCase
+			g.defaultTagValFormat = text.CamelCase
 		case text.LispCase:
-			g.missingTagValFormat = text.LispCase
+			g.defaultTagValFormat = text.LispCase
 		case text.PascalCase:
-			g.missingTagValFormat = text.PascalCase
+			g.defaultTagValFormat = text.PascalCase
 		default:
-			g.missingTagValFormat = text.Mirror
+			g.defaultTagValFormat = text.Mirror
 		}
 	}
 }

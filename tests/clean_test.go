@@ -2,6 +2,7 @@ package tests
 
 import (
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 
@@ -24,6 +25,7 @@ func cleanCmd_Verbose(t *testing.T) {
 		t.Error(err)
 	}
 	generatedFile.Close()
+	defer os.Remove(generatedFile.Name())
 
 	// run clean command for current dir
 	cleanCmd, out := setupRootCmd("clean", "--verbose")

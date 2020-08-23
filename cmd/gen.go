@@ -45,7 +45,7 @@ func NewGenCmd() *cobra.Command {
 				gen.Tags(cfg.Tags),
 				gen.Recursive(cfg.IsRecursive),
 				gen.TaggedFieldOnly(cfg.OnlyTaggedFields),
-				gen.MissingTagPolicy(cfg.MissingTagValFormat),
+				gen.DefaultTagValFormat(cfg.DefaultTagValFormat),
 			)
 
 			if err := generator.Do(); err != nil {
@@ -64,10 +64,10 @@ func NewGenCmd() *cobra.Command {
 
 func setGenFlags(genCmd *cobra.Command) {
 	cfg := config.GetGeneratorCfg()
-	genCmd.Flags().BoolVarP(&cfg.All, "all", "a", false, "process all structs irrespective of magic comment")
-	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate tag as constants for the given dir directory")
-	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{}, "Comma separated list of tags we are going to create constants for")
+	genCmd.Flags().BoolVarP(&cfg.All, "all", "a", false, "Process all structs irrespective of magic comment")
+	genCmd.Flags().StringVarP(&cfg.Dir, "dir", "d", ".", "Generate constants for the given dir")
+	genCmd.Flags().StringSliceVarP(&cfg.Tags, "tags", "t", []string{}, "Create constants only for given comma separated list of tags. Empty means process all available tags")
 	genCmd.Flags().BoolVarP(&cfg.IsRecursive, "recursive", "r", false, "Recursively create constants for all subdirectories too")
-	genCmd.Flags().BoolVarP(&cfg.OnlyTaggedFields, "onlyTagged", "e", false, "Escape empty tag fields. Do not create string constants for unTagged fields.")
-	genCmd.Flags().StringVarP(&cfg.MissingTagValFormat, "missingTagValFormat", "f", "", "policy to generate tag value for fields with no tags. Currently supports [camelcase, lispcase, pascalcase, snakecase]")
+	genCmd.Flags().BoolVarP(&cfg.OnlyTaggedFields, "onlyTagged", "s", false, "Do not create constants for unTagged fields. -s means skip")
+	genCmd.Flags().StringVarP(&cfg.DefaultTagValFormat, "defaultTagValFormat", "f", "", "Format to generate tag value constant for fields with no tags. Default format is  Currently supports [camelcase, lispcase, pascalcase, snakecase]")
 }

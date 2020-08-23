@@ -28,7 +28,7 @@ type generatorCfg struct {
 	Tags                []string
 	IsRecursive         bool
 	OnlyTaggedFields    bool
-	MissingTagValFormat string
+	DefaultTagValFormat string
 }
 
 var cfgStore = struct {
