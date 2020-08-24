@@ -51,7 +51,7 @@ func NewGenCmd() *cobra.Command {
 			if err := generator.Do(); err != nil {
 				return err
 			}
-			fmt.Println("Done.")
+			fmt.Fprintln(cmd.OutOrStdout(), "Done.")
 			return nil
 		},
 	}

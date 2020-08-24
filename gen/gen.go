@@ -88,25 +88,25 @@ func (g *generator) Do() error {
 }
 
 func (g *generator) generateConstantsFile(dir string) error {
-
 	p := parser.New("tgcon", g.tags, g.allStructs, g.onlyTaggedFields)
 	parsedFiles, err := p.ParseDir(dir)
 	if err != nil {
 		return err
 	}
-	if len(parsedFiles) == 0 {
-		return nil
+
+	// only write to a file if there is some struct field
+	if len(parsedFiles) > 0 {
+		generatedFilePath := path.Join(dir, parsedFiles[0].PackageName+"_tgcon_gen.go")
+		generatedFileWriter, err := os.OpenFile(generatedFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+		if err != nil {
+			return fmt.Errorf("error creating generated file %s: "+err.Error(), generatedFilePath)
+		}
+		if err := g.generateAndWrite(parsedFiles, generatedFileWriter); err != nil {
+			return fmt.Errorf("error writing to generated file %s :: "+err.Error(), generatedFilePath)
+		}
 	}
 
-	generatedFilePath := path.Join(dir, parsedFiles[0].PackageName+"_tgcon_gen.go")
-	generatedFileWriter, err := os.OpenFile(generatedFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
-	if err != nil {
-		return fmt.Errorf("error creating generated file %s: "+err.Error(), generatedFilePath)
-	}
-	if err := g.generateAndWrite(parsedFiles, generatedFileWriter); err != nil {
-		return fmt.Errorf("error writing to generated file %s :: "+err.Error(), generatedFilePath)
-	}
-
+	// recursive check
 	if !g.isRecursive {
 		return nil
 	}
