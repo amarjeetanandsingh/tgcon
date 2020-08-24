@@ -20,7 +20,7 @@ func TestCleanCmd(t *testing.T) {
 func cleanCmd_Verbose(t *testing.T) {
 
 	// generate a tmp file to be cleaned by tgcon clean
-	generatedFile, err := ioutil.TempFile(".", "*_tgconst_gen.go")
+	generatedFile, err := ioutil.TempFile(".", "*_tgcon_gen.go")
 	if err != nil {
 		t.Error(err)
 	}
@@ -33,8 +33,8 @@ func cleanCmd_Verbose(t *testing.T) {
 		t.Error(err)
 	}
 
-	if strings.Count(out.String(), "_tgconst_gen.go") == 0 {
-		t.Errorf("no _tgconst_gen.go deleted in current dir")
+	if strings.Count(out.String(), "_tgcon_gen.go") == 0 {
+		t.Errorf("no _tgcon_gen.go deleted in current dir")
 	}
 }
 
@@ -55,7 +55,7 @@ func cleanCmd_Recursive(t *testing.T) {
 
 	// search generated file in dir
 	generatedFiles, err := files.ListFilesInDirRecursive(dir, func(fileName string) bool {
-		return strings.HasSuffix(fileName, "_tgconst_gen.go")
+		return strings.HasSuffix(fileName, "_tgcon_gen.go")
 	})
 	if err != nil {
 		t.Error(err)
@@ -82,7 +82,7 @@ func cleanCmd_Dir(t *testing.T) {
 
 	// search generated file in dir
 	generatedFiles, err := files.ListFilesInDir(dir, func(fileName string) bool {
-		return strings.HasSuffix(fileName, "_tgconst_gen.go")
+		return strings.HasSuffix(fileName, "_tgcon_gen.go")
 	})
 	if err != nil {
 		t.Error(err)
@@ -109,7 +109,7 @@ func cleanCmd_Verbose_Dir_Recursive(t *testing.T) {
 
 	// search generated file in dir
 	generatedFiles, err := files.ListFilesInDir(dir, func(fileName string) bool {
-		return strings.HasSuffix(fileName, "_tgconst_gen.go")
+		return strings.HasSuffix(fileName, "_tgcon_gen.go")
 	})
 	if err != nil {
 		t.Error(err)
@@ -118,7 +118,7 @@ func cleanCmd_Verbose_Dir_Recursive(t *testing.T) {
 		t.Error("generated files found after clean")
 	}
 
-	if strings.Count(out.String(), "_tgconst_gen.go") == 0 {
+	if strings.Count(out.String(), "_tgcon_gen.go") == 0 {
 		t.Error("cleaned filed not logged.")
 	}
 }

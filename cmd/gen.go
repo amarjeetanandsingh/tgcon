@@ -29,7 +29,7 @@ const (
 	genShortDoc = "generates struct field tag values as string constant"
 	genLongDoc  = `
 It generates string constants of struct field tag values. All constants are
-generated into a new file(with _tgconst_gen.go as suffix) for each package.`
+generated into a new file(with _tgcon_gen.go as suffix) for each package.`
 )
 
 func NewGenCmd() *cobra.Command {

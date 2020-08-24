@@ -53,10 +53,10 @@ func New(options ...func(c *cleaner)) *cleaner {
 	return c
 }
 
-// TODO:v2: make _tgconst_gen.go suffix as config
+// TODO:v2: make _tgcon_gen.go suffix as config
 func (c *cleaner) Do() error {
-	if err := c.deleteFilesWithSuffix(c.dir, "_tgconst_gen.go"); err != nil {
-		return fmt.Errorf("error deleting %s suffix files in %s dir :: "+err.Error(), "_tgconst_gen.go", c.dir)
+	if err := c.deleteFilesWithSuffix(c.dir, "_tgcon_gen.go"); err != nil {
+		return fmt.Errorf("error deleting %s suffix files in %s dir :: "+err.Error(), "_tgcon_gen.go", c.dir)
 	}
 	return nil
 }

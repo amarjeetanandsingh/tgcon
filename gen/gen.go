@@ -89,7 +89,7 @@ func (g *generator) Do() error {
 
 func (g *generator) generateConstantsFile(dir string) error {
 
-	p := parser.New("tgcon", g.tags, g.allStructs, g.onlyTaggedFields)
+	p := parser.New(" tgcon ", g.tags, g.allStructs, g.onlyTaggedFields)
 	parsedFiles, err := p.ParseDir(dir)
 	if err != nil {
 		return err
@@ -98,7 +98,7 @@ func (g *generator) generateConstantsFile(dir string) error {
 		return nil
 	}
 
-	generatedFilePath := path.Join(dir, dir+"_tgconst_gen.go")
+	generatedFilePath := path.Join(dir, dir+"_tgcon_gen.go")
 	generatedFileWriter, err := os.OpenFile(generatedFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return fmt.Errorf("error creating generated file %s: "+err.Error(), generatedFilePath)
