@@ -21,7 +21,7 @@ This leads to a situation where we need to type a string literal(`tag values`) w
 
 
 ### Solution
-**We can't use string const as tag value, but we can generate tag values as string const.**
+_**We can't use string const as tag value, but we can generate tag values as string const.**_
 
 
 `tgcon` helps generate string constant for struct field tag values, and we can use the constant everywhere in the code. 
@@ -39,7 +39,7 @@ tgcon gen [flags]
 
 - It generates struct field tag values as string constant for all the eligible struct(_use magic comment to filter_) fields into a single file. 
 - One constant file is generated per directory with `_tgcon_gen.go` as file name suffix.
-- By default it parses only those structs which contains a **magic comment**, ` tgcon `(with a leading and trailing spaces), in a comment associated to them.
+- By default, it parses only those structs which contains a **magic comment**, ` tgcon `(with a leading and trailing spaces), in a comment associated to them.
 - Use `--all` flag to generate field tag constant for all structs irrespective of the magic comment
 
 
