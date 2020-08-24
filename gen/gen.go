@@ -89,7 +89,7 @@ func (g *generator) Do() error {
 
 func (g *generator) generateConstantsFile(dir string) error {
 
-	p := parser.New(" tgcon ", g.tags, g.allStructs, g.onlyTaggedFields)
+	p := parser.New("tgcon", g.tags, g.allStructs, g.onlyTaggedFields)
 	parsedFiles, err := p.ParseDir(dir)
 	if err != nil {
 		return err
