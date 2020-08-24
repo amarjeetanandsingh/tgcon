@@ -38,7 +38,7 @@ tgcon gen [flags]
 ```
 
 - It generates struct field tag values as string constant for all the eligible struct(_use magic comment to filter_) fields into a single file. 
-- One constant file is generated per directory with `_tgcon_gen.go` as file name suffix.
+- One constant file is generated per directory with file name as `<package_name>_tgcon_gen.go`.
 - By default, it parses only those structs which contains a **magic comment**, `tgcon`, in a comment associated to them.
 - Use `--all` flag to generate field tag constant for all structs irrespective of the magic comment
 

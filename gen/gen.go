@@ -98,7 +98,7 @@ func (g *generator) generateConstantsFile(dir string) error {
 		return nil
 	}
 
-	generatedFilePath := path.Join(dir, dir+"_tgcon_gen.go")
+	generatedFilePath := path.Join(dir, parsedFiles[0].PackageName+"_tgcon_gen.go")
 	generatedFileWriter, err := os.OpenFile(generatedFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return fmt.Errorf("error creating generated file %s: "+err.Error(), generatedFilePath)
