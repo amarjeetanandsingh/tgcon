@@ -56,6 +56,23 @@ tgcon gen [flags]
   -t, --tags strings                 Create constants only for given comma separated list of tags. Empty means process all available tags
 ```
 
+## 2) tgcon clean
+```
+tgcon clean [flags]
+```
 
+- It reverses the action of `tgcon gen` command.
+- It deletes all files with `_tgcon_gen.go` as suffix in their name in the given directory.
+- Use `-r` to clean all subdirectories too.
+
+
+
+### Options
+```
+  -d, --dir string   Delete generated const file from given directory (default ".")
+  -h, --help         help for clean
+  -r, --recursive    Recursively delete generated const files for all subdirectories too
+  -v, --verbose      Prints the generated files getting deleted.
+```
 
 [comment]: <> (# Your feedback matters, Create a google forms)
