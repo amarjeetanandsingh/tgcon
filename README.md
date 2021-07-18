@@ -93,3 +93,8 @@ tgcon clean [flags]
 ```
 
 [comment]: <> (# Your feedback matters, Create a google forms)
+
+
+
+## Donate
+[Sponsor Open Source development activities and free contents for the community.](https://amarjeet.in)
