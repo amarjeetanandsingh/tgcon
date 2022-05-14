@@ -5,6 +5,12 @@ Generates struct field tag values as string constant.
 [![Go Report Card](https://goreportcard.com/badge/github.com/amarjeetanandsingh/tgcon)](https://goreportcard.com/report/github.com/amarjeetanandsingh/tgcon)
 
 # Installation
+### Go 1.16+
+```shell script
+go install github.com/amarjeetanandsingh/tgcon@latest
+```
+
+### Go version < 1.16
 ```shell script
 go get -u github.com/amarjeetanandsingh/tgcon
 ```
